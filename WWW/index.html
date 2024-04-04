@@ -2,19 +2,263 @@
 <html>
 	<head>
 		<meta charset="utf-8">
+
 		<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 		<script src="./js/jquery-3.6.3.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/echarts@5.3.0/dist/echarts.min.js"></script>
 	</head>
-	<body>
-		<h1>MQTT即使temporature</h1>
-		<p>
 
+	<body>
+
+
+		<h1>即時資料</h1>
+		<p>
+		<style>
+		 #temperatureCharthour, #humidityCharthour, #AQICharthour {
+			display: none;
+			height: 400px;
+			width: 490px;
+		 }
+		#temperatureChartday, #humidityChartday, #AQIChartday {
+			display: none;
+			height: 400px;
+			width: 490px;
+		}
+		#temperatureChartweek, #humidityChartweek, #AQIChartweek {
+			display: none;
+			height: 400px;
+			width: 490px;
+		 }
+		</style>
 			溫度:<span id="temperature">??</span> &deg; <br>
 			濕度:<span id="humidity">??</span>% &deg; <br>
 			AQI:<span id="AQI">??</span>
 			
+			<h1>表格</h1>
+			<button onclick="hourhourhour()">顯示/隱藏近一小時</button>
+			<button onclick="daydayday()">顯示/隱藏近一天</button>
+			<button onclick="weekweekweek()">顯示/隱藏近一個禮拜</button><br>
+			<div id="temperatureCharthour" ></div>
+			<div id="humidityCharthour" ></div>
+			<div id="AQICharthour"></div>
+			<div id="temperatureChartday"></div>
+			<div id="humidityChartday"></div>	
+			<div id="AQIChartday"></div>	
+			<div id="temperatureChartweek"></div>
+			<div id="humidityChartweek"></div>
+			<div id="AQIChartweek"></div>
 		</p>
 		<script>
+			
+			//初始化溫度
+			var temperatureCharthour = echarts.init(document.getElementById('temperatureCharthour'));
+			var temperaturehourOption = {
+				title: {
+					text: '近一小時的溫度'
+				},
+				xAxis: {
+					type: 'time',
+					splitLine: {
+						show: true
+					}
+				},
+				yAxis: {
+					type: 'value'
+				},
+				series: [{
+					name: 'Temperature',
+					type: 'line',
+					data: []
+				}]
+			};
+			temperatureCharthour.setOption(temperaturehourOption);
+
+			var temperatureChartday = echarts.init(document.getElementById('temperatureChartday'));
+			var temperaturedayOption = {
+				title: {
+					text: '近一天的溫度'
+				},
+				xAxis: {
+					type: 'time',
+					splitLine: {
+						show: true
+					}
+				},
+				yAxis: {
+					type: 'value'
+				},
+				series: [{
+					name: 'Temperature',
+					type: 'line',
+					data: []
+				}]
+			};
+			temperatureChartday.setOption(temperaturedayOption);
+			
+			var temperatureChartweek = echarts.init(document.getElementById('temperatureChartweek'));
+			var temperatureweekOption = {
+				title: {
+					text: '近一個禮拜的溫度'
+				},
+				xAxis: {
+					type: 'time',
+					splitLine: {
+						show: true
+					}
+				},
+				yAxis: {
+					type: 'value'
+				},
+				series: [{
+					name: 'Temperature',
+					type: 'line',
+					data: []
+				}]
+			};
+			temperatureChartweek.setOption(temperatureweekOption);
+			// 初始化濕度
+			var humidityCharthour = echarts.init(document.getElementById('humidityCharthour'));
+			var humidityhourOption = {
+				title: {
+					text: '近一小時的濕度'
+				},
+				xAxis: {
+					type: 'time',
+					splitLine: {
+						show: true
+					}
+				},
+				yAxis: {
+					type: 'value'
+				},
+				series: [{
+					name: 'Humidity',
+					type: 'line',
+					data: []
+				}]
+			};
+			
+		humidityCharthour.setOption(humidityhourOption);
+			var humidityChartday = echarts.init(document.getElementById('humidityChartday'));
+			var humiditydayOption = {
+				title: {
+					text: '近一天的濕度'
+				},
+				xAxis: {
+					type: 'time',
+					splitLine: {
+						show: true
+					}
+				},
+				yAxis: {
+					type: 'value'
+				},
+				series: [{
+					name: 'Humidity',
+					type: 'line',
+					data: []
+				}]
+			};
+		humidityChartday.setOption(humiditydayOption);
+		
+		var humidityChartweek = echarts.init(document.getElementById('humidityChartweek'));
+		var humidityweekOption = {
+			title: {
+				text: '近一個禮拜的濕度'
+			},
+			xAxis: {
+				type: 'time',
+					splitLine: {
+					show: true
+				}
+			},
+			yAxis: {
+				type: 'value'
+			},
+			series: [{
+				name: 'Humidity',
+				type: 'line',
+				data: []
+			}]
+		};
+		humidityChartweek.setOption(humidityweekOption);
+		
+		
+		
+			var AQICharthour = echarts.init(document.getElementById('AQICharthour'));
+			var AQIhourOption = {
+				title: {
+					text: '近一個小時的AQI'
+				},
+				xAxis: {
+					type: 'time',
+					splitLine: {
+						show: true
+					}
+				},
+				yAxis: {
+					type: 'value',
+					max:300,
+					min:-100
+				},
+				series: [{
+					name: 'AQI',
+					type: 'line',
+					data: []
+				}]
+			};
+			AQICharthour.setOption(AQIhourOption);
+
+			var AQIChartday = echarts.init(document.getElementById('AQIChartday'));
+			var AQIdayOption = {
+				title: {
+					text: '近一天的AQI'
+				},
+				xAxis: {
+					type: 'time',
+					splitLine: {
+						show: true
+					}
+				},
+				yAxis: {
+					type: 'value',
+					max:300,
+					min:-100
+				},
+				series: [{
+					name: 'AQI',
+					type: 'line',
+					data: []
+				}]
+			};
+			AQIChartday.setOption(AQIdayOption);
+			
+			var AQIChartweek = echarts.init(document.getElementById('AQIChartweek'));
+			var AQIweekOption = {
+				title: {
+					text: '近一個禮拜AQI'
+				},
+				xAxis: {
+					type: 'time',
+					splitLine: {
+						show: true
+					}
+				},
+				yAxis: {
+					type: 'value',
+					max:300,
+					min:-100
+				},
+				series: [{
+					name: 'AQI',
+					type: 'line',
+					data: []
+				}]
+			};
+			AQIChartweek.setOption(AQIweekOption);		
+		
+
+
 		$(function(){
 
 			var socket = io.connect();
@@ -23,25 +267,201 @@
 				var now = new Date();
 				var newData;
 				var series;
-				var data
+				var data;
 				if(jason.temp) {
 					$("#temperature").html(jason.temp);
+					newData = [now, jason.temp];
+					serieshour = temperatureCharthour.getOption().series[0];
+					seriesday = temperatureChartday.getOption().series[0];
+					seriesweek = temperatureChartweek.getOption().series[0];
+					datahour = serieshour.data;dataday = seriesday.data;dataweek = seriesweek.data;
+					datahour.push(newData);dataday.push(newData);dataweek.push(newData);
+					var timestamp = new Date(datahour[0][0]);
+					if ((now.getTime() - timestamp.getTime()) > 60000*10) {
+						datahour.shift();
+					}
+					temperatureCharthour.setOption({
+						series: [{
+							data: datahour
+						}]
+					});
+					var timestamp = new Date(dataday[0][0]);
+					if ((now.getTime() - timestamp.getTime()) > 60000*10*24) {
+						dataday.shift();
+					}
+					temperatureChartday.setOption({
+						series: [{
+							data: dataday
+						}]
+					});
+					var timestamp = new Date(dataweek[0][0]);
+					if ((now.getTime() - timestamp.getTime()) > 60000*10*24*7) {
+						dataweek.shift();
+					}
+					temperatureChartweek.setOption({
+						series: [{
+							data: dataweek
+						}]
+					})
 				}
 				
 				if(jason.humid) {
 						$("#humidity").html(jason.humid);
-				}
+						newData = [now, jason.humid];
+						
+						serieshour = humidityCharthour.getOption().series[0];
+						seriesday = humidityChartday.getOption().series[0];
+						seriesweek = humidityChartweek.getOption().series[0];
+						
+						datahour = serieshour.data;
+						dataday = seriesday.data;
+						dataweek = seriesweek.data;
+						
+						datahour.push(newData);
+						dataday.push(newData);
+						dataweek.push(newData);
+						
+						var timestamp = new Date(datahour[0][0]);
+						if ((now.getTime() - timestamp.getTime()) > 60000*10) {
+							datahour.shift();
+						}
+						humidityCharthour.setOption({
+							series: [{
+								data: datahour
+							}]
+						});
+						var timestamp = new Date(dataday[0][0]);
+						if ((now.getTime() - timestamp.getTime()) > 60000*10*24) {
+							dataday.shift();
+						}
+						humidityChartday.setOption({
+							series: [{
+								data: dataday
+							}]
+						});
+						var timestamp = new Date(dataweek[0][0]);
+						if ((now.getTime() - timestamp.getTime()) > 60000*10*24*7) {
+							dataweek.shift();
+						}
+						humidityChartweek.setOption({
+							series: [{
+								data: dataweek
+							}]
+						})
+					}
 				if(jason.AQI) {
 					if(jason.AQI>=0&&jason.AQI<=50)$("#AQI").html('良好');
-					else if(jason.AQI>=51&&jason.AQI<=100)$("#AQI").html('普通');
-					else if(jason.AQI>=101&&jason.AQI<=150)$("#AQI").html('對敏感族群不健康');
-					else if(jason.AQI>=151&&jason.AQI<=200)$("#AQI").html('對所有族群不健康');
-					else if(jason.AQI>=201&&jason.AQI<=300)$("#AQI").html('非常不健康');
-					else if(jason.AQI>=301)$("#AQI").html('危害');
+					else if(jason.AQI>=51&&jason.AQI<=100)$("#AQI").html(jason.AQI+'  普通');
+					else if(jason.AQI>=101&&jason.AQI<=150)$("#AQI").html(jason.AQI+'  對敏感族群不健康');
+					else if(jason.AQI>=151&&jason.AQI<=200)$("#AQI").html(jason.AQI+'  對所有族群不健康');
+					else if(jason.AQI>=201&&jason.AQI<=300)$("#AQI").html(jason.AQI+'  非常不健康');
+					else if(jason.AQI>=301)$("#AQI").html(jason.AQI+'  危害');
+					newData = [now, jason.AQI];
+					
+					serieshour = AQICharthour.getOption().series[0];
+					seriesday = AQIChartday.getOption().series[0];
+					seriesweek = AQIChartweek.getOption().series[0];
+					
+					datahour = serieshour.data;
+					dataday = seriesday.data;
+					dataweek = seriesweek.data;
+					
+					datahour.push(newData);
+					dataday.push(newData);
+					dataweek.push(newData);
+					
+					var timestamp = new Date(datahour[0][0]);
+					if ((now.getTime() - timestamp.getTime()) > 60000*60) {
+						datahour.shift();
+					}
+					AQICharthour.setOption({
+						series: [{
+							data: datahour
+						}]
+					});
+					var timestamp = new Date(dataday[0][0]);
+					if ((now.getTime() - timestamp.getTime()) > 60000*60*24) {
+						dataday.shift();
+					}
+					AQIChartday.setOption({
+						series: [{
+							data: dataday
+						}]
+					});
+					var timestamp = new Date(dataweek[0][0]);
+					if ((now.getTime() - timestamp.getTime()) > 60000*60*24*7) {
+						dataweek.shift();
+					}
+					AQIChartweek.setOption({
+						series: [{
+							data: dataweek
+						}]
+					})
 				}								
 			});		
 		});
-		</script>	
+		var tableVisiblehour= false;
+
+		function hourhourhour() {
+		  var tablet = document.getElementById("temperatureCharthour");
+		  var tableh = document.getElementById("humidityCharthour");
+		  var tableA = document.getElementById("AQICharthour");
+		  if (tableVisiblehour) {
+			tablet.style.display = "none";
+			tableh.style.display = "none";
+			tableA.style.display = "none";
+			tableVisiblehour = false;
+		  } else {
+			tablet.style.display = "inline-block";
+			tableh.style.display = "inline-block";
+			tableA.style.display = "inline-block";
+			tableVisiblehour = true;
+		  }
+		}
+		var tableVisibleday= false;
+
+		function daydayday() {
+		  var tablet = document.getElementById("temperatureChartday");
+		  var tableh = document.getElementById("humidityChartday");
+		  var tableA = document.getElementById("AQIChartday");
+		  if (tableVisibleday) {
+			tablet.style.display = "none";
+			tableh.style.display = "none";
+			tableA.style.display = "none";
+			tableVisibleday = false;
+		  } else {
+			tablet.style.display = "inline-block";
+			tableh.style.display = "inline-block";
+			tableA.style.display = "inline-block";
+			tableVisibleday = true;
+		  }
+		}
+		var tableVisibleweek= false;
+
+		function weekweekweek() {
+		  var tablet = document.getElementById("temperatureChartweek");
+		  var tableh = document.getElementById("humidityChartweek");
+		  var tableA = document.getElementById("AQIChartweek");
+		  if (tableVisibleweek) {
+			tablet.style.display = "none";
+			tableh.style.display = "none";
+			tableA.style.display = "none";
+			tableVisibleweek = false;
+		  } else {
+			tablet.style.display = "inline-block";
+			tableh.style.display = "inline-block";
+			tableA.style.display = "inline-block";
+			tableVisibleweek = true;
+		  }
+		}
+
+		</script>
+
+		
+
+
+		
+		
  	</body>
 	
 </html>

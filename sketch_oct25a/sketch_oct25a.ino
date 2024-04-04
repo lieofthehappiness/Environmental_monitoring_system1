@@ -21,7 +21,7 @@ float dustDensity = 0;
 
 //設定Wi-Fi資料
 const char* ssid = "WIFINAME";
-const char* password = "YOURPASSWORD";
+const char* password = "PASSWORD";
 const char* mqtt_server = "120.107.168.127";
 
 /*
